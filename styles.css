@@ -1,0 +1,98 @@
+html, body {
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    margin: 0 auto;
+    height: 80%;
+    width: 50%;
+    min-height: 400px;
+    min-width: 250px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: sans-serif; /* Use whatever font-family you want */
+}
+
+div{
+    border: red 10px;
+}
+
+button {
+    color: white;
+    display: inline-block;
+    border: medium solid black;
+    border-radius: 10px;
+    margin: 0px;
+    padding: 10px;
+    font-family: sans-serif; /* Use whatever font-family you want */
+    font-size: 1rem;
+    line-height: 1;
+    /* background: transparent; */
+    opacity: 0.8;
+    -webkit-appearance: none;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    transition: 0.10s;
+}
+button:focus {outline-style: none;
+    box-shadow: 0px 0px 0px 2px darkgray;
+}
+button:hover {
+    /* background-color: blue; */
+    opacity: 1;
+    
+}
+
+#container {
+    border: medium solid lightgray;
+    box-sizing: border-box;
+    width: 600px;
+    display: grid;
+    grid-template: repeat(6,1fr) / repeat(4,1fr);
+    gap: 5px;
+    padding: 10px;
+    align-items: center;
+    border-radius: 10px;
+
+}
+#empty {
+    grid-area: 2 / 1 / 2 / 3;
+}
+#display {
+    border: thin solid lightgray;
+    height: 60px;
+    border-radius: 10px;
+    grid-column: 1 / 5;
+    padding: 10px;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+}
+#mainDisplay {
+    /* align-self: flex-start; */
+    font-size: 1.5em;
+}
+.clear {
+    background-color: darkgray;
+    border-color: darkgray;
+}
+.number {
+    background-color: rgb(170, 80, 80);
+    border-color: rgb(170, 80, 80);
+}
+.operator {
+    background-color: rgb(80, 80, 180);
+    border-color: rgb(80, 80, 180);
+}
+.decimal, .equals {
+    background-color: rgb(127, 80, 170);
+    border-color: rgb(127, 80, 170);
+}
+#clear-all {
+    grid-area: 2 / 3 / 2 / 3;
+}
+#backspace {
+    grid-area: 2 / 4 / 2 / 4;
+}
