@@ -3,8 +3,8 @@ html, body {
     justify-content: center;
     display: flex;
     margin: 0 auto;
-    height: 80%;
-    width: 50%;
+    height: 100%;
+    width: 100%;
     min-height: 400px;
     min-width: 250px;
     -webkit-user-select: none;
@@ -48,7 +48,8 @@ button:hover {
 #container {
     border: medium solid lightgray;
     box-sizing: border-box;
-    width: 600px;
+    /* width: 600px; */
+    height: 400px;
     display: grid;
     grid-template: repeat(6,1fr) / repeat(4,1fr);
     gap: 5px;
