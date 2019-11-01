@@ -110,7 +110,7 @@ function operate() {
     stringAdd(operatorArray);
     stringSubtract(operatorArray);
     if (operatorArray[0] > 10e8 || operatorArray[0] < -10e8) {
-        operatorArray[0] = operatorArray[0].toExponential(5);
+        operatorArray[0] = operatorArray[0].toExponential(8);
     }
     mainDisplay = ""+operatorArray[0];
     md.innerText = mainDisplay;
