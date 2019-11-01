@@ -109,7 +109,9 @@ function operate() {
     stringDivide(operatorArray);
     stringAdd(operatorArray);
     stringSubtract(operatorArray);
-   
+    if (operatorArray[0] > 10e8 || operatorArray[0] < -10e8) {
+        operatorArray[0] = operatorArray[0].toExponential(5);
+    }
     mainDisplay = ""+operatorArray[0];
     md.innerText = mainDisplay;
     if (operatorArray[0] === "Divide By Zero Error") {
