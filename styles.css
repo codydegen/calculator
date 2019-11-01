@@ -48,7 +48,7 @@ button:hover {
 #container {
     border: medium solid lightgray;
     box-sizing: border-box;
-    /* width: 600px; */
+    width: 250px;
     height: 400px;
     display: grid;
     grid-template: repeat(6,1fr) / repeat(4,1fr);
@@ -70,10 +70,11 @@ button:hover {
     display: flex;
     flex-direction: column-reverse;
     justify-content: space-between;
+    overflow: hidden;
 }
 #mainDisplay {
     /* align-self: flex-start; */
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 .clear {
     background-color: darkgray;
