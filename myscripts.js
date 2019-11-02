@@ -1,6 +1,6 @@
 var mainDisplay = "0";
 var secondaryDisplay = "0";
-
+let shiftDown = false;
 const numbers = document.querySelectorAll('button');
 numbers.forEach((number, mainDisplay) => number.addEventListener('click', buttonEvent));
 
@@ -8,16 +8,19 @@ const operators = document.querySelectorAll('.operator');
 //numbers.forEach(number => number.addEventListener('click', operatorEvent));
 
 window.addEventListener('keydown', onPress);
-
+window.addEventListener('keyup', checkShift);
 function onPress(e) {
+    
     const key = document.querySelector(`button[data-key="${e.keyCode}"]`);
+    let keyPass=keyLookup(e.keyCode);
     //console.log(e);
-    //console.dir(key);
+    console.log(keyPass);
+    console.dir(e);
     //console.log(key.innerText);
     //const num = key.innerText;
-    //if key.innerText === null return;
+    if (keyPass === undefined) return;
     //return key.innerText;
-    processEvent(key.innerText);
+    processEvent(keyPass);
 }
 
 function buttonEvent(e) {
@@ -170,4 +173,39 @@ function stringSubtract(operatorArray) {
 
 function round(value, decimals) {
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-  }
+}
+
+function keyLookup(key) {
+    if (key <= 57 && key >= 48 && !shiftDown) {
+        return (key - 48)+"";
+    }
+    else {
+        switch (key) {
+            case 16:
+                shiftDown = true;
+                break; //Figure this one out later
+            case 56:
+                return "*";
+            case 189:
+                return "-";
+            case 187:  
+            case 13:
+                return shiftDown ? "+" : "=";
+            case 191:
+                return "/";
+            case 190:
+                return ".";
+            case 8:
+                return "BS";
+            case 27:
+                return "AC";
+        }
+    }
+    
+};
+
+function checkShift(e) {
+    if (e.keyCode === 16) {
+        shiftDown = false;
+    }
+};
