@@ -1,49 +1,39 @@
+'use strict';
+
+// Using global variables for this.  In a future version I would fix this.  As this 
+// is just a variable associated with the display, similar behavior could be achieved by reading 
+// from the display.  Not sure the performance impacts of that, though.
 var mainDisplay = "0";
 var secondaryDisplay = "0";
 let shiftDown = false;
-const numbers = document.querySelectorAll('button');
-numbers.forEach((number, mainDisplay) => number.addEventListener('click', buttonEvent));
-
-const operators = document.querySelectorAll('.operator');
-//numbers.forEach(number => number.addEventListener('click', operatorEvent));
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button, mainDisplay) => button.addEventListener('click', buttonEvent));
 
 window.addEventListener('keydown', onPress);
-window.addEventListener('keyup', checkShift);
-function onPress(e) {
-    
-    const key = document.querySelector(`button[data-key="${e.keyCode}"]`);
+window.addEventListener('keyup', checkShift);//Need for checking for shift
+
+function onPress(e) {//This and buttonEvent are used to pipe in the necessary data to the analysis function.
     let keyPass=keyLookup(e.keyCode);
-    //console.log(e);
-    console.log(keyPass);
-    console.dir(e);
-    //console.log(key.innerText);
-    //const num = key.innerText;
     if (keyPass === undefined) return;
-    //return key.innerText;
     processEvent(keyPass);
 }
 
 function buttonEvent(e) {
-    
-    //const num = e.target.innerText;
-    //console.dir(e.target.innerText);
-    //console.log(e.target.id);
     processEvent(e.target.innerText);
-
-
-    
-    //alert("You clicked a number");
 };
 
-function processEvent(value) {
+function processEvent(value) {//This is the main functiion where everything important happens.
     const md = document.querySelector('#mainDisplay');
     const sd = document.querySelector('#secondaryDisplay');
 
-    let lastMd = mainDisplay[mainDisplay.length -1];
+    // I found it easier to manipulate the information if it was split into different array items.
+    // However, it was still useful to have everything in one string to make backspace easier to use.
     let operatorArray = mainDisplay.split(" ");
-    //md.innerText = mainDisplay
-    // mainDisplay +=e.target.innerText;
-    // console.log(mainDisplay);
+    // When adding an operator to the string, a trailing space was added.  This was causing an extra item to be added to the array.
+    if (operatorArray[operatorArray.length-1] === "") operatorArray.splice(operatorArray.length-1,1);
+    let lastMd = operatorArray[operatorArray.length-1] 
+
+    // Loop to run through the various inputs that couuld be made.  Could be re-factored at a later date.
     if (value === "AC" ) {
         mainDisplay="0";
         md.classList.add("newNumber");
@@ -103,19 +93,22 @@ function operate() {
     sd.innerText = mainDisplay;
     let operatorArray = mainDisplay.split(" ");
 
+    // If the user has a trailing operator, this strips that
     if (operatorArray.length%2 === 0){
-        console.log("remove trailing operator");
+        //console.log("remove trailing operator");
         operatorArray.splice(operatorArray.length-1,1);
     }
 
-    stringMultiply(operatorArray);
-    stringDivide(operatorArray);
-    stringAdd(operatorArray);
-    stringSubtract(operatorArray);
+    stringOperate(operatorArray, multiply);
+    stringOperate(operatorArray, divide);
+    stringOperate(operatorArray, add);
+    stringOperate(operatorArray, subtract);
+
+    // To account for large numbers, in a future version I'd go back and make this a little bit more logical- it's pretty arbitrary.
     if (operatorArray[0] > 10e8 || operatorArray[0] < -10e8) {
-        operatorArray[0] = operatorArray[0].toExponential(8);
+        operatorArray[0] = Number(operatorArray[0]).toExponential(8);
     }
-    mainDisplay = ""+operatorArray[0];
+    mainDisplay = ""+operatorArray[0]; //Make sure that this casts to string
     md.innerText = mainDisplay;
     if (operatorArray[0] === "Divide By Zero Error") {
         sd.innerText = "";
@@ -124,48 +117,30 @@ function operate() {
     }
 
 };
-function stringMultiply(operatorArray) {
-    let i = 1;
-    while(operatorArray.includes("*")) {
 
-        if(operatorArray[i] === "*"){
-            operatorArray.splice(i-1,3,multiply(operatorArray[i-1],operatorArray[i+1]));
-        } else { i+=2; }
+
+function stringOperate(operatorArray, callback) {
+    let i = 1;
+    let operator = "";
+    switch (callback) {
+        case multiply:
+            operator = "*";
+            break;
+        case divide:
+            operator = "/";
+            break;
+        case add:
+            operator = "+";
+            break;
+        case subtract:
+            operator = "-";
+            break;
     }
+    // Indexes added to make sure that this doesn't get caught in an endless loop
+    while(operatorArray.includes(operator) && i<1000) {
 
-};
-
-function stringDivide(operatorArray) {
-    let i = 1;
-    while(operatorArray.includes("/")) {
-
-        if(operatorArray[i] === "/"){
-            if (operatorArray[i+1] === "0") {
-                operatorArray.splice(0,operatorArray.length-1,"Divide By Zero Error");
-            }
-            else {operatorArray.splice(i-1,3,divide(operatorArray[i-1],operatorArray[i+1]))};
-        } else { i+=2; }
-    }
-
-};
-
-function stringAdd(operatorArray) {
-    let i = 1;
-    while(operatorArray.includes("+")) {
-
-        if(operatorArray[i] === "+"){
-            operatorArray.splice(i-1,3,add(operatorArray[i-1],operatorArray[i+1]));
-        } else { i+=2; }
-    }
-
-};
-
-function stringSubtract(operatorArray) {
-    let i = 1;
-    while(operatorArray.includes("-")) {
-
-        if(operatorArray[i] === "-"){
-            operatorArray.splice(i-1,3,subtract(operatorArray[i-1],operatorArray[i+1]));
+        if(operatorArray[i] === operator){
+            operatorArray.splice(i-1,3,callback(operatorArray[i-1],operatorArray[i+1]));
         } else { i+=2; }
     }
 
@@ -183,7 +158,7 @@ function keyLookup(key) {
         switch (key) {
             case 16:
                 shiftDown = true;
-                break; //Figure this one out later
+                break;
             case 56:
                 return "*";
             case 189:
