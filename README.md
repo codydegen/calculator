@@ -1,5 +1,5 @@
 # Calculator
-Calculator developed following The Odin Project's curriculum
+Calculator developed following The Odin Project's [curriculum](https://www.theodinproject.com/lessons/calculator).
 
 ## General info
 This project was completed following The Odin Project's [curriculum](https://www.theodinproject.com/lessons/calculator).  The purpose was to help teach myself basic DOM manipulation skills and JavaScript event handlers.
